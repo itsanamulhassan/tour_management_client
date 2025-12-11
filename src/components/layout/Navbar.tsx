@@ -12,10 +12,8 @@ import { Link } from "react-router";
 
 // Navigation links array to be used in both desktop and mobile menus
 const navigationLinks = [
-  { href: "#", label: "Home", active: true },
-  { href: "#", label: "Features" },
-  { href: "#", label: "Pricing" },
-  { href: "#", label: "About" },
+  { href: "/", label: "Home" },
+  { href: "/about", label: "About" },
 ];
 
 export default function Navbar() {
@@ -64,12 +62,8 @@ export default function Navbar() {
                 <NavigationMenuList className="flex-col items-start gap-0 md:gap-2">
                   {navigationLinks.map((link, index) => (
                     <NavigationMenuItem key={index} className="w-full">
-                      <NavigationMenuLink
-                        href={link.href}
-                        className="py-1.5"
-                        active={link.active}
-                      >
-                        {link.label}
+                      <NavigationMenuLink className="py-1.5" asChild>
+                        <Link to={link.href}> {link.label}</Link>
                       </NavigationMenuLink>
                     </NavigationMenuItem>
                   ))}
@@ -88,11 +82,10 @@ export default function Navbar() {
                 {navigationLinks.map((link, index) => (
                   <NavigationMenuItem key={index}>
                     <NavigationMenuLink
-                      active={link.active}
-                      href={link.href}
+                      asChild
                       className="text-muted-foreground hover:text-primary py-1.5 font-medium"
                     >
-                      {link.label}
+                      <Link to={link.href}>{link.label}</Link>
                     </NavigationMenuLink>
                   </NavigationMenuItem>
                 ))}
