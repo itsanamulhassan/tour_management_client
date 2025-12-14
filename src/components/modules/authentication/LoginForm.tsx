@@ -8,9 +8,10 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import Password from "@/components/ui/password";
 import { cn } from "@/lib/utils";
-// import { useLoginMutation } from "@/redux/features/auth/auth.api";
-import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
+import { useLoginMutation } from "@/redux/feature/authentication/authenticationApi";
+import { useForm, type FieldValues, type SubmitHandler } from "react-hook-form";
 import { Link, useNavigate } from "react-router";
 import { toast } from "sonner";
 
@@ -20,15 +21,12 @@ export function LoginForm({
 }: React.HTMLAttributes<HTMLDivElement>) {
   const navigate = useNavigate();
   const form = useForm();
-  //   const [login] = useLoginMutation();
+  const [login] = useLoginMutation();
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
     try {
       const res = await login(data).unwrap();
-      console.log(res);
-    } catch (err) {
-      console.error(err);
-
-      if (err.status === 401) {
+    } catch (error) {
+      if (error.status === 400) {
         toast.error("Your account is not verified");
         navigate("/verify", { state: data.email });
       }
@@ -71,12 +69,7 @@ export function LoginForm({
                 <FormItem>
                   <FormLabel>Password</FormLabel>
                   <FormControl>
-                    <Input
-                      type="password"
-                      placeholder="********"
-                      {...field}
-                      value={field.value || ""}
-                    />
+                    <Password {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

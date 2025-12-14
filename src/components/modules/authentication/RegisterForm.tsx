@@ -15,9 +15,13 @@ import { Link, useNavigate } from "react-router";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Password from "@/components/ui/password";
-// import { useRegisterMutation } from "@/redux/features/auth/auth.api";
-import { toast } from "sonner";
 
+import { toast } from "sonner";
+import { useRegisterMutation } from "@/redux/feature/authentication/authenticationApi";
+
+// ✅ Password regex: At least 1 uppercase, 1 special char, 6–32 characters
+export const passwordRegex =
+  /^(?=.*[A-Z])(?=.*[!@#$%^&*()_+\-=\\{};':"|,.<>/?]).{6,32}$/;
 const registerSchema = z
   .object({
     name: z
@@ -27,10 +31,14 @@ const registerSchema = z
       })
       .max(50),
     email: z.email(),
-    password: z.string().min(8, { error: "Password is too short" }),
-    confirmPassword: z
-      .string()
-      .min(8, { error: "Confirm Password is too short" }),
+    password: z.string().regex(passwordRegex, {
+      error:
+        "Password must be 6 - 32 characters long, include at least 1 uppercase letter and 1 special character.",
+    }),
+    confirmPassword: z.string().regex(passwordRegex, {
+      error:
+        "Password must be 6 - 32 characters long, include at least 1 uppercase letter and 1 special character.",
+    }),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: "Password do not match",
@@ -41,7 +49,7 @@ export function RegisterForm({
   className,
   ...props
 }: React.HTMLAttributes<HTMLDivElement>) {
-  //   const [register] = useRegisterMutation();
+  const [register] = useRegisterMutation();
   const navigate = useNavigate();
 
   const form = useForm<z.infer<typeof registerSchema>>({
@@ -55,19 +63,15 @@ export function RegisterForm({
   });
 
   const onSubmit = async (data: z.infer<typeof registerSchema>) => {
-    const userInfo = {
-      name: data.name,
-      email: data.email,
-      password: data.password,
-    };
-
     try {
-      const result = await register(userInfo).unwrap();
-      console.log(result);
-      toast.success("User created successfully");
-      navigate("/verify");
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { confirmPassword: unusedProperty, ...rest } = { ...data };
+
+      const res = await register(rest).unwrap();
+      toast.success(res.message);
+      navigate("/login");
     } catch (error) {
-      console.error(error);
+      console.log(error);
     }
   };
 
