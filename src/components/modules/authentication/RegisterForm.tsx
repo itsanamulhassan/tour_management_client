@@ -12,47 +12,23 @@ import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router";
-import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Password from "@/components/ui/password";
 
 import { toast } from "sonner";
 import { useRegisterMutation } from "@/redux/feature/authentication/authenticationApi";
+import { registerSchema } from "@/schemas";
+import type { ApiResponse, RegisterDTO } from "@/types";
+import type { RegisterPayload } from "@/types/auth.types";
 
-// ✅ Password regex: At least 1 uppercase, 1 special char, 6–32 characters
-export const passwordRegex =
-  /^(?=.*[A-Z])(?=.*[!@#$%^&*()_+\-=\\{};':"|,.<>/?]).{6,32}$/;
-const registerSchema = z
-  .object({
-    name: z
-      .string()
-      .min(3, {
-        error: "Name is too short",
-      })
-      .max(50),
-    email: z.email(),
-    password: z.string().regex(passwordRegex, {
-      error:
-        "Password must be 6 - 32 characters long, include at least 1 uppercase letter and 1 special character.",
-    }),
-    confirmPassword: z.string().regex(passwordRegex, {
-      error:
-        "Password must be 6 - 32 characters long, include at least 1 uppercase letter and 1 special character.",
-    }),
-  })
-  .refine((data) => data.password === data.confirmPassword, {
-    message: "Password do not match",
-    path: ["confirmPassword"],
-  });
-
-export function RegisterForm({
+const RegisterForm = ({
   className,
   ...props
-}: React.HTMLAttributes<HTMLDivElement>) {
+}: React.HTMLAttributes<HTMLDivElement>) => {
   const [register] = useRegisterMutation();
   const navigate = useNavigate();
 
-  const form = useForm<z.infer<typeof registerSchema>>({
+  const form = useForm<RegisterDTO>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
       name: "",
@@ -62,12 +38,15 @@ export function RegisterForm({
     },
   });
 
-  const onSubmit = async (data: z.infer<typeof registerSchema>) => {
+  const onSubmit = async (data: RegisterDTO) => {
     try {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { confirmPassword: unusedProperty, ...rest } = { ...data };
 
-      const res = await register(rest).unwrap();
+      const res = (await register(
+        rest
+      ).unwrap()) as ApiResponse<RegisterPayload>;
+
       toast.success(res.message);
       navigate("/login");
     } catch (error) {
@@ -184,4 +163,6 @@ export function RegisterForm({
       </div>
     </div>
   );
-}
+};
+
+export default RegisterForm;

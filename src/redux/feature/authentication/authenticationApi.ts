@@ -1,15 +1,17 @@
 import { baseApi } from "@/redux/baseApi";
+import type { ApiResponse, LoginDTO } from "@/types";
+import type { RegisterPayload } from "@/types/auth.types";
 
 const authenticationApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    register: builder.mutation({
+    register: builder.mutation<ApiResponse<RegisterPayload>, RegisterPayload>({
       query: (data) => ({
         url: "/users/register",
         method: "POST",
         data,
       }),
     }),
-    login: builder.mutation({
+    login: builder.mutation<null, LoginDTO>({
       query: (data) => ({
         url: "/auths/signin",
         method: "POST",
