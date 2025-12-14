@@ -1,5 +1,5 @@
 import { baseApi } from "@/redux/baseApi";
-import type { ApiResponse, LoginDTO } from "@/types";
+import type { ApiResponse, LoginDTO, SendOtpDTO, VerifyOtpDTO } from "@/types";
 import type { RegisterPayload } from "@/types/auth.types";
 
 const authenticationApi = baseApi.injectEndpoints({
@@ -11,21 +11,21 @@ const authenticationApi = baseApi.injectEndpoints({
         data,
       }),
     }),
-    login: builder.mutation<null, LoginDTO>({
+    login: builder.mutation<ApiResponse<LoginDTO>, LoginDTO>({
       query: (data) => ({
         url: "/auths/signin",
         method: "POST",
         data,
       }),
     }),
-    sendOtp: builder.mutation({
+    sendOtp: builder.mutation<ApiResponse<SendOtpDTO>, SendOtpDTO>({
       query: (data) => ({
         url: "/otp/send",
         method: "POST",
         data,
       }),
     }),
-    verifyOtp: builder.mutation({
+    verifyOtp: builder.mutation<ApiResponse<VerifyOtpDTO>, VerifyOtpDTO>({
       query: (data) => ({
         url: "/otp/verify",
         method: "POST",

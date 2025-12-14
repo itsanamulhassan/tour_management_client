@@ -1,7 +1,7 @@
 import TravelLogin from "@/assets/images/travel-login.jpg";
 import { Link } from "react-router";
 import Logo from "@/assets/icons/Logo";
-import { LoginForm } from "@/components/modules/authentication/LoginForm";
+import LoginForm from "@/components/modules/authentication/LoginForm";
 
 const Login = () => {
   return (

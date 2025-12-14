@@ -14,7 +14,6 @@ import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Password from "@/components/ui/password";
-
 import { toast } from "sonner";
 import { useRegisterMutation } from "@/redux/feature/authentication/authenticationApi";
 import { registerSchema } from "@/schemas";

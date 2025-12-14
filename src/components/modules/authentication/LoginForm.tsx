@@ -11,25 +11,29 @@ import { Input } from "@/components/ui/input";
 import Password from "@/components/ui/password";
 import { cn } from "@/lib/utils";
 import { useLoginMutation } from "@/redux/feature/authentication/authenticationApi";
+import type { ApiResponse, LoginDTO } from "@/types";
+import { apiErrorHandler } from "@/utils/apiErrorHandler";
 import { useForm, type FieldValues, type SubmitHandler } from "react-hook-form";
 import { Link, useNavigate } from "react-router";
 import { toast } from "sonner";
 
-export function LoginForm({
+const LoginForm = ({
   className,
   ...props
-}: React.HTMLAttributes<HTMLDivElement>) {
+}: React.HTMLAttributes<HTMLDivElement>) => {
   const navigate = useNavigate();
   const form = useForm();
   const [login] = useLoginMutation();
+
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
     try {
-      const res = await login(data).unwrap();
+      const res = (await login(
+        data as LoginDTO
+      ).unwrap()) as ApiResponse<LoginDTO>;
+      toast.success(res.message);
     } catch (error) {
-      if (error.status === 400) {
-        toast.error("Your account is not verified");
-        navigate("/verify", { state: data.email });
-      }
+      apiErrorHandler(error);
+      navigate("/verify", { state: data.email });
     }
   };
 
@@ -104,4 +108,6 @@ export function LoginForm({
       </div>
     </div>
   );
-}
+};
+
+export default LoginForm;

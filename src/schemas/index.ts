@@ -11,4 +11,6 @@ export {
   forgetPasswordSchema,
   resetPasswordSchema,
   setPasswordSchema,
+  sendOTP,
+  verifyOTP,
 } from "./auth.schemas";

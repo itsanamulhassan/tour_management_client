@@ -110,3 +110,15 @@ export const resetPasswordSchema = z.object({
       "Password must be 6 - 32 characters long, include at least 1 uppercase letter and 1 special character",
   }),
 });
+
+export const verifyOTP = z.object({
+  email: z
+    .email({ error: "Email must a standard email format" })
+    .min(1, { error: "Email is required." }),
+  otp: z
+    .string({ error: "OTP must be a string." })
+    .min(1, { error: "OTP is required." })
+    .max(6, "OTP must be in 6 characters"),
+});
+
+export const sendOTP = verifyOTP.pick({ email: true });
