@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import Password from "@/components/ui/password";
+import { config } from "@/config";
 import { cn } from "@/lib/utils";
 import { useLoginMutation } from "@/redux/feature/authentication/authenticationApi";
 import type { ApiResponse, LoginDTO } from "@/types";
@@ -93,6 +94,7 @@ const LoginForm = ({
         </div>
 
         <Button
+          onClick={() => window.open(`${config.baseUrl}/auths/google`)}
           type="button"
           variant="outline"
           className="w-full cursor-pointer"

@@ -19,6 +19,7 @@ import { useRegisterMutation } from "@/redux/feature/authentication/authenticati
 import { registerSchema } from "@/schemas";
 import type { ApiResponse, RegisterDTO } from "@/types";
 import type { RegisterPayload } from "@/types/auth.types";
+import { config } from "@/config";
 
 const RegisterForm = ({
   className,
@@ -146,6 +147,7 @@ const RegisterForm = ({
         </div>
 
         <Button
+          onClick={() => window.open(`${config.baseUrl}/auths/google`)}
           type="button"
           variant="outline"
           className="w-full cursor-pointer"

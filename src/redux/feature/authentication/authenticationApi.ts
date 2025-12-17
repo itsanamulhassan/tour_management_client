@@ -2,7 +2,7 @@ import { baseApi } from "@/redux/baseApi";
 import type { ApiResponse, LoginDTO, SendOtpDTO, VerifyOtpDTO } from "@/types";
 import type { RegisterPayload } from "@/types/auth.types";
 
-const authenticationApi = baseApi.injectEndpoints({
+export const authenticationApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     register: builder.mutation<ApiResponse<RegisterPayload>, RegisterPayload>({
       query: (data) => ({
@@ -16,6 +16,12 @@ const authenticationApi = baseApi.injectEndpoints({
         url: "/auths/signin",
         method: "POST",
         data,
+      }),
+    }),
+    logout: builder.mutation({
+      query: () => ({
+        url: "/auths/signout",
+        method: "POST",
       }),
     }),
     sendOtp: builder.mutation<ApiResponse<SendOtpDTO>, SendOtpDTO>({
@@ -32,6 +38,12 @@ const authenticationApi = baseApi.injectEndpoints({
         data,
       }),
     }),
+    getMe: builder.query({
+      query: () => ({
+        url: "/users/me",
+        method: "GET",
+      }),
+    }),
   }),
 });
 
@@ -40,4 +52,6 @@ export const {
   useLoginMutation,
   useSendOtpMutation,
   useVerifyOtpMutation,
+  useGetMeQuery,
+  useLogoutMutation,
 } = authenticationApi;
