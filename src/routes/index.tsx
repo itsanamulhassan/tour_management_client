@@ -3,7 +3,11 @@ import About from "@/pages/About";
 import Login from "@/pages/Login";
 import Register from "@/pages/Register";
 import Verify from "@/pages/Verify";
+import { generateRoutes } from "@/utils/generateRoutes";
 import { createBrowserRouter } from "react-router";
+import { adminSidebarItems } from "./adminSidebarItems";
+import DashboardLayout from "@/components/layout/DashboardLayout";
+import { userSidebarItems } from "./userSidebarItems";
 
 const router = createBrowserRouter([
   {
@@ -15,6 +19,16 @@ const router = createBrowserRouter([
         Component: About,
       },
     ],
+  },
+  {
+    path: "/admin",
+    Component: DashboardLayout,
+    children: [...generateRoutes(adminSidebarItems)],
+  },
+  {
+    path: "/user",
+    Component: DashboardLayout,
+    children: [...generateRoutes(userSidebarItems)],
   },
   {
     Component: Login,

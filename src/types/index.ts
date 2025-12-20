@@ -1,3 +1,5 @@
+import type { ComponentType } from "react";
+
 export type { LoginDTO, RegisterDTO } from "./auth.types";
 export type { SendOtpDTO, VerifyOtpDTO } from "./otp.types";
 export type ApiResponse<T> =
@@ -20,3 +22,13 @@ export type ResponseError = {
     data?: never;
   };
 };
+
+export interface SidebarItemProps {
+  url: string;
+  title: string;
+  items: {
+    title: string;
+    url: string;
+    component: ComponentType;
+  }[];
+}
