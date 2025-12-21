@@ -16,11 +16,14 @@ import {
 } from "@/redux/feature/authentication/authenticationApi";
 import { Loader } from "lucide-react";
 import { useAppDispatch } from "@/redux/hooks";
+import { Fragment } from "react/jsx-runtime";
 
 // Navigation links array to be used in both desktop and mobile menus
 const navigationLinks = [
-  { href: "/", label: "Home" },
-  { href: "/about", label: "About" },
+  { href: "/", label: "Home", role: "PUBLIC" },
+  { href: "/about", label: "About", role: "PUBLIC" },
+  { href: "/admin", label: "Dashboard", role: "ADMIN" },
+  { href: "/user", label: "Dashboard", role: "USER" },
 ];
 
 const Navbar = () => {
@@ -71,12 +74,23 @@ const Navbar = () => {
             <PopoverContent align="start" className="w-36 p-1 md:hidden">
               <NavigationMenu className="max-w-none *:w-full">
                 <NavigationMenuList className="flex-col items-start gap-0 md:gap-2">
-                  {navigationLinks.map((link, index) => (
-                    <NavigationMenuItem key={index} className="w-full">
-                      <NavigationMenuLink className="py-1.5" asChild>
-                        <Link to={link.href}> {link.label}</Link>
-                      </NavigationMenuLink>
-                    </NavigationMenuItem>
+                  {navigationLinks.map((link) => (
+                    <Fragment key={link.href}>
+                      {link.role === "PUBLIC" && (
+                        <NavigationMenuItem className="w-full">
+                          <NavigationMenuLink className="py-1.5" asChild>
+                            <Link to={link.href}> {link.label}</Link>
+                          </NavigationMenuLink>
+                        </NavigationMenuItem>
+                      )}
+                      {link.role === data?.data?.role && (
+                        <NavigationMenuItem className="w-full">
+                          <NavigationMenuLink className="py-1.5" asChild>
+                            <Link to={link.href}> {link.label}</Link>
+                          </NavigationMenuLink>
+                        </NavigationMenuItem>
+                      )}
+                    </Fragment>
                   ))}
                 </NavigationMenuList>
               </NavigationMenu>
@@ -90,15 +104,29 @@ const Navbar = () => {
             {/* Navigation menu */}
             <NavigationMenu className="max-md:hidden">
               <NavigationMenuList className="gap-2">
-                {navigationLinks.map((link, index) => (
-                  <NavigationMenuItem key={index}>
-                    <NavigationMenuLink
-                      asChild
-                      className="text-muted-foreground hover:text-primary py-1.5 font-medium"
-                    >
-                      <Link to={link.href}>{link.label}</Link>
-                    </NavigationMenuLink>
-                  </NavigationMenuItem>
+                {navigationLinks.map((link) => (
+                  <Fragment key={link.href}>
+                    {link.role === "PUBLIC" && (
+                      <NavigationMenuItem>
+                        <NavigationMenuLink
+                          asChild
+                          className="text-muted-foreground hover:text-primary py-1.5 font-medium"
+                        >
+                          <Link to={link.href}>{link.label}</Link>
+                        </NavigationMenuLink>
+                      </NavigationMenuItem>
+                    )}
+                    {link.role === data?.data?.role && (
+                      <NavigationMenuItem>
+                        <NavigationMenuLink
+                          asChild
+                          className="text-muted-foreground hover:text-primary py-1.5 font-medium"
+                        >
+                          <Link to={link.href}>{link.label}</Link>
+                        </NavigationMenuLink>
+                      </NavigationMenuItem>
+                    )}
+                  </Fragment>
                 ))}
               </NavigationMenuList>
             </NavigationMenu>

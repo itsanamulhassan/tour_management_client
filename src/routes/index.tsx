@@ -4,10 +4,13 @@ import Login from "@/pages/Login";
 import Register from "@/pages/Register";
 import Verify from "@/pages/Verify";
 import { generateRoutes } from "@/utils/generateRoutes";
-import { createBrowserRouter } from "react-router";
+import { createBrowserRouter, Navigate } from "react-router";
 import { adminSidebarItems } from "./adminSidebarItems";
 import DashboardLayout from "@/components/layout/DashboardLayout";
 import { userSidebarItems } from "./userSidebarItems";
+import { withAuth } from "@/utils/withAuth";
+import { ROLE } from "@/constants/role";
+import Unauthorized from "@/pages/Unauthorized";
 
 const router = createBrowserRouter([
   {
@@ -16,19 +19,25 @@ const router = createBrowserRouter([
     children: [
       {
         path: "about",
-        Component: About,
+        Component: withAuth(About, ROLE.USER),
       },
     ],
   },
   {
     path: "/admin",
-    Component: DashboardLayout,
-    children: [...generateRoutes(adminSidebarItems)],
+    Component: withAuth(DashboardLayout, ROLE.ADMIN),
+    children: [
+      { index: true, element: <Navigate to="/admin/analytics" /> },
+      ...generateRoutes(adminSidebarItems),
+    ],
   },
   {
     path: "/user",
     Component: DashboardLayout,
-    children: [...generateRoutes(userSidebarItems)],
+    children: [
+      { index: true, element: <Navigate to="/user/bookings" /> },
+      ...generateRoutes(userSidebarItems),
+    ],
   },
   {
     Component: Login,
@@ -41,6 +50,10 @@ const router = createBrowserRouter([
   {
     Component: Verify,
     path: "/verify",
+  },
+  {
+    Component: Unauthorized,
+    path: "/unauthorized",
   },
 ]);
 export default router;

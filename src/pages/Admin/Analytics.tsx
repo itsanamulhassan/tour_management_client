@@ -1,9 +1,15 @@
-import React from "react";
+import type { FC } from "react";
 
-type Props = {};
+interface AnalyticsProps {
+  type?: unknown;
+}
 
-const Analytics = (props: Props) => {
-  return <div>Analytics</div>;
+const Analytics: FC<AnalyticsProps> = () => {
+  return (
+    <>
+      <h1>Analytics</h1>
+    </>
+  );
 };
 
 export default Analytics;

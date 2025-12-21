@@ -1,6 +1,8 @@
-export const role = {
-  superAdmin: "SUPERADMIN",
-  admin: "ADMIN",
-  guide: "GUIDE",
-  user: "USER",
-};
+import type { RoleProps } from "@/utils/getSidebarItems";
+
+export const ROLE = {
+  SUPERADMIN: "SUPERADMIN",
+  ADMIN: "ADMIN",
+  GUIDE: "GUIDE",
+  USER: "USER",
+} as Record<RoleProps, RoleProps>;
