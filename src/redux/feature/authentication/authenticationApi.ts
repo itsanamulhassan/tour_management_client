@@ -43,6 +43,7 @@ export const authenticationApi = baseApi.injectEndpoints({
         url: "/users/me",
         method: "GET",
       }),
+      transformResponse: (res) => res.data,
     }),
   }),
 });
