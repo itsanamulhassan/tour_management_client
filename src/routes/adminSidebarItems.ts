@@ -1,0 +1,36 @@
+import AddTour from "@/pages/Admin/AddTour";
+import AddTourType from "@/pages/Admin/AddTourType";
+
+import type { SidebarItemProps } from "@/types";
+import { lazy } from "react";
+const Analytics = lazy(() => import("@/pages/Admin/Analytics"));
+
+export const adminSidebarItems: SidebarItemProps[] = [
+  {
+    title: "Dashboard",
+    url: "#",
+    items: [
+      {
+        title: "Analytics",
+        url: "/admin/analytics",
+        component: Analytics,
+      },
+    ],
+  },
+  {
+    title: "Tour Management",
+    url: "#",
+    items: [
+      {
+        title: "Add Tour Type",
+        url: "/admin/add-tour-type",
+        component: AddTourType,
+      },
+      {
+        title: "Add Tour",
+        url: "/admin/add-tour",
+        component: AddTour,
+      },
+    ],
+  },
+];
