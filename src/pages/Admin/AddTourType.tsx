@@ -1,4 +1,3 @@
-import { DataTable } from "@/components/table";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -10,8 +9,31 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useGetToursQuery } from "@/redux/feature/authentication/tour/tourApi";
 import { MoreHorizontal } from "lucide-react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { tourTypeSchemas } from "@/schemas/tour.schemas";
+import type { CreateTourTypeDTO } from "@/types/tour.types";
+import { DataTable } from "@/components/table";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 
-export const columns: ColumnDef[] = [
+const columns: ColumnDef[] = [
   {
     accessorKey: "status",
     header: "Status",
@@ -43,7 +65,7 @@ export const columns: ColumnDef[] = [
             <DropdownMenuItem>View</DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem asChild>
-              <Button className="w-full" variant="destructive">
+              <Button size="sm" className="w-full" variant="destructive">
                 Delete
               </Button>
             </DropdownMenuItem>
@@ -53,11 +75,61 @@ export const columns: ColumnDef[] = [
     },
   },
 ];
-const AddTourType = (props: Props) => {
+const AddTourType = () => {
   const { data: tours, isLoading: toursLoading } = useGetToursQuery(undefined);
-  console.log(tours);
+  const [] = useAdd;
+  const form = useForm<CreateTourTypeDTO>({
+    resolver: zodResolver(tourTypeSchemas.createTourType),
+  });
+  function onSubmit(values: CreateTourTypeDTO) {
+    // Do something with the form values.
+    // ✅ This will be type-safe and validated.
+    console.log(values);
+  }
+
   return (
     <div>
+      <div className="flex justify-end mb-4">
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button>Add Tour Type</Button>
+          </DialogTrigger>
+          <DialogContent size="sm">
+            <DialogHeader>
+              <DialogTitle>Add new tour type</DialogTitle>
+              <DialogDescription>
+                Give the valid information for creating the new tour type.
+              </DialogDescription>
+            </DialogHeader>
+            <div>
+              <Form {...form}>
+                <form
+                  onSubmit={form.handleSubmit(onSubmit)}
+                  className="space-y-8"
+                >
+                  <FormField
+                    control={form.control}
+                    name="name"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Enter the valid tour type.</FormLabel>
+                        <FormControl>
+                          <Input placeholder="Enter the tour type" {...field} />
+                        </FormControl>
+                        <FormDescription>
+                          This is your public display name.
+                        </FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <Button type="submit">Submit</Button>
+                </form>
+              </Form>
+            </div>
+          </DialogContent>
+        </Dialog>
+      </div>
       <DataTable
         columns={columns}
         data={[
