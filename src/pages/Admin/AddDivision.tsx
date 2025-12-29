@@ -41,7 +41,7 @@ import { useState } from "react";
 import type { ColumnDef } from "@tanstack/react-table";
 import ConfirmationDialog from "@/components/confirmation-dialog";
 
-const AddTourType = () => {
+const AddDivision = () => {
   const [addTourTypeOpen, setTourTypeOpen] = useState<boolean>();
 
   const { data: tourTypes, isLoading: tourTypesLoading } =
@@ -122,7 +122,7 @@ const AddTourType = () => {
           onOpenChange={() => setTourTypeOpen(addTourTypeOpen)}
         >
           <DialogTrigger asChild>
-            <Button>Add Tour Type</Button>
+            <Button>Add Division</Button>
           </DialogTrigger>
           <DialogContent size="sm">
             <DialogHeader>
@@ -168,4 +168,4 @@ const AddTourType = () => {
   );
 };
 
-export default AddTourType;
+export default AddDivision;

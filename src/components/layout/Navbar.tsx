@@ -13,7 +13,7 @@ import {
   authenticationApi,
   useGetMeQuery,
   useLogoutMutation,
-} from "@/redux/feature/authentication/authenticationApi";
+} from "@/redux/feature/authentication/authentication.api";
 import { Loader } from "lucide-react";
 import { useAppDispatch } from "@/redux/hooks";
 import { Fragment } from "react/jsx-runtime";

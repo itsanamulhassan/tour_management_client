@@ -11,7 +11,7 @@ import { Input } from "@/components/ui/input";
 import Password from "@/components/ui/password";
 import { config } from "@/config";
 import { cn } from "@/lib/utils";
-import { useLoginMutation } from "@/redux/feature/authentication/authenticationApi";
+import { useLoginMutation } from "@/redux/feature/authentication/authentication.api";
 import type { ApiResponse, LoginDTO } from "@/types";
 import { apiErrorHandler } from "@/utils/apiErrorHandler";
 import { useForm, type FieldValues, type SubmitHandler } from "react-hook-form";

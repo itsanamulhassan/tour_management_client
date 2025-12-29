@@ -15,7 +15,7 @@ import { Link, useNavigate } from "react-router";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Password from "@/components/ui/password";
 import { toast } from "sonner";
-import { useRegisterMutation } from "@/redux/feature/authentication/authenticationApi";
+import { useRegisterMutation } from "@/redux/feature/authentication/authentication.api";
 import { registerSchema } from "@/schemas";
 import type { ApiResponse, RegisterDTO } from "@/types";
 import type { RegisterPayload } from "@/types/auth.types";

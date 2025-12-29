@@ -1,4 +1,4 @@
-import { useGetMeQuery } from "@/redux/feature/authentication/authenticationApi";
+import { useGetMeQuery } from "@/redux/feature/authentication/authentication.api";
 import type { ComponentType } from "react";
 import { Navigate } from "react-router";
 import type { RoleProps } from "./getSidebarItems";

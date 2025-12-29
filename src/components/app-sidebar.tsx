@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/sidebar";
 import Logo from "@/assets/icons/Logo";
 import { Link } from "react-router";
-import { useGetMeQuery } from "@/redux/feature/authentication/authenticationApi";
+import { useGetMeQuery } from "@/redux/feature/authentication/authentication.api";
 import { getSidebarItems } from "@/utils/getSidebarItems";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {

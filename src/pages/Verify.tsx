@@ -25,7 +25,7 @@ import { cn } from "@/lib/utils";
 import {
   useSendOtpMutation,
   useVerifyOtpMutation,
-} from "@/redux/feature/authentication/authenticationApi";
+} from "@/redux/feature/authentication/authentication.api";
 import { verifyOTP } from "@/schemas";
 import type { VerifyOtpDTO } from "@/types";
 import { apiErrorHandler } from "@/utils/apiErrorHandler";

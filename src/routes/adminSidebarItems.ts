@@ -27,6 +27,11 @@ export const adminSidebarItems: SidebarItemProps[] = [
         component: AddTourType,
       },
       {
+        title: "Add Division",
+        url: "/admin/add-division",
+        component: AddTourType,
+      },
+      {
         title: "Add Tour",
         url: "/admin/add-tour",
         component: AddTour,
