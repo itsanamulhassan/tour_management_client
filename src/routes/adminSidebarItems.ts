@@ -1,3 +1,4 @@
+import AddDivision from "@/pages/Admin/AddDivision";
 import AddTour from "@/pages/Admin/AddTour";
 import AddTourType from "@/pages/Admin/AddTourType";
 
@@ -29,7 +30,7 @@ export const adminSidebarItems: SidebarItemProps[] = [
       {
         title: "Add Division",
         url: "/admin/add-division",
-        component: AddTourType,
+        component: AddDivision,
       },
       {
         title: "Add Tour",

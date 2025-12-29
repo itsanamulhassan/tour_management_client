@@ -10,8 +10,6 @@ import {
 import { Loader, MoreHorizontal } from "lucide-react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { tourTypeSchemas } from "@/schemas/tour.schemas";
-import type { CreateTourTypeDTO } from "@/types/tour.types";
 import { DataTable } from "@/components/table";
 import {
   Dialog,
@@ -31,57 +29,68 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import {
-  useAddTourTypeMutation,
-  useGetTourTypesQuery,
-  useRemoveTourTypeMutation,
-} from "@/redux/feature/tour/tour.type.api";
 import { toast } from "sonner";
 import { useState } from "react";
 import type { ColumnDef } from "@tanstack/react-table";
 import ConfirmationDialog from "@/components/confirmation-dialog";
+import {
+  useAddDivisionMutation,
+  useGetDivisionsQuery,
+  useRemoveDivisionMutation,
+} from "@/redux/feature/division/division.api";
+import type { CreateDivisionDTO } from "@/types/division.types";
+import { divisionSchema } from "@/schemas/division.schemas";
+import { Textarea } from "@/components/ui/textarea";
+import SingleImageUploader from "@/components/image-uploader";
 
 const AddDivision = () => {
-  const [addTourTypeOpen, setTourTypeOpen] = useState<boolean>();
+  const [addDivisionOpen, setAddDivisionOpen] = useState<boolean>();
+  const [image, setImage] = useState<File | null>(null);
 
-  const { data: tourTypes, isLoading: tourTypesLoading } =
-    useGetTourTypesQuery(undefined);
-  const [addTourType, { isLoading: addTourTypeLoading }] =
-    useAddTourTypeMutation();
-  const [removeTourType, { isLoading: removeTourTypeLoading }] =
-    useRemoveTourTypeMutation();
+  const { data: divisions, isLoading: divisionsLoading } =
+    useGetDivisionsQuery(undefined);
+  const [addDivision, { isLoading: addDivisionLoading }] =
+    useAddDivisionMutation();
+  const [removeDivision, { isLoading: removeDivisionLoading }] =
+    useRemoveDivisionMutation();
 
-  const form = useForm<CreateTourTypeDTO>({
-    resolver: zodResolver(tourTypeSchemas.createTourType),
+  const form = useForm<CreateDivisionDTO>({
+    resolver: zodResolver(divisionSchema.createDivision),
     defaultValues: {
       name: "",
+      description: "",
     },
   });
-  const onSubmit = async (values: CreateTourTypeDTO) => {
-    const res = await addTourType(values).unwrap();
+  const onSubmit = async (data: CreateDivisionDTO) => {
+    const formData = new FormData();
+
+    formData.append("data", JSON.stringify(data));
+    formData.append("file", image as File);
+
+    const res = await addDivision(formData).unwrap();
     if (res?.success) {
       toast.success(res.message);
-      setTourTypeOpen(false);
+      setAddDivisionOpen(false);
     }
   };
 
-  const removeTourTypeHandler = async (id: string) => {
-    const res = await removeTourType(id).unwrap();
+  const removeDivisionHandler = async (id: string) => {
+    const res = await removeDivision(id).unwrap();
     if (res?.success) {
       toast.success(res.message);
     }
   };
 
-  const columns: ColumnDef<Partial<CreateTourTypeDTO & { _id: string }>>[] = [
+  const columns: ColumnDef<Partial<CreateDivisionDTO & { _id: string }>>[] = [
     {
       accessorKey: "name",
-      header: "Type Name",
+      header: "Division",
     },
     {
       header: "Actions",
       id: "actions",
       cell: ({ row }) => {
-        const type = row.original;
+        const division = row.original;
         return (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -92,11 +101,14 @@ const AddDivision = () => {
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>Edit</DropdownMenuLabel>
+              <DropdownMenuLabel>View</DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuItem asChild>
                 <ConfirmationDialog
-                  disabled={removeTourTypeLoading}
-                  onConfirm={() => removeTourTypeHandler(type._id as string)}
+                  disabled={removeDivisionLoading}
+                  onConfirm={() =>
+                    removeDivisionHandler(division._id as string)
+                  }
                 >
                   <Button size="sm" className="w-full" variant="destructive">
                     Delete
@@ -110,25 +122,25 @@ const AddDivision = () => {
     },
   ];
 
-  if (tourTypesLoading) {
+  if (divisionsLoading) {
     return <Loader />;
   }
   return (
     <div>
-      {/* Add tour types form and dialog */}
+      {/* Add division form and dialog */}
       <div className="flex justify-end mb-4">
         <Dialog
-          open={addTourTypeOpen}
-          onOpenChange={() => setTourTypeOpen(addTourTypeOpen)}
+          open={addDivisionOpen}
+          onOpenChange={() => setAddDivisionOpen(addDivisionOpen)}
         >
           <DialogTrigger asChild>
             <Button>Add Division</Button>
           </DialogTrigger>
           <DialogContent size="sm">
             <DialogHeader>
-              <DialogTitle>Add new tour type</DialogTitle>
+              <DialogTitle>Add new division</DialogTitle>
               <DialogDescription>
-                Give the valid information for creating the new tour type.
+                Give the valid information for creating the new division.
               </DialogDescription>
             </DialogHeader>
             <div>
@@ -142,9 +154,12 @@ const AddDivision = () => {
                     name="name"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Enter the valid tour type.</FormLabel>
+                        <FormLabel>Enter the valid division.</FormLabel>
                         <FormControl>
-                          <Input placeholder="Enter the tour type" {...field} />
+                          <Input
+                            placeholder="Enter the division here."
+                            {...field}
+                          />
                         </FormControl>
                         <FormDescription>
                           This is your public display name.
@@ -153,7 +168,30 @@ const AddDivision = () => {
                       </FormItem>
                     )}
                   />
-                  <Button disabled={addTourTypeLoading} type="submit">
+                  <FormField
+                    control={form.control}
+                    name="description"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>
+                          Enter the valid description for the new division.
+                        </FormLabel>
+                        <FormControl>
+                          <Textarea
+                            {...field}
+                            placeholder="Enter the description here."
+                            id="message"
+                          />
+                        </FormControl>
+                        <FormDescription>
+                          This is your public display name.
+                        </FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <SingleImageUploader onChange={setImage} />
+                  <Button disabled={addDivisionLoading} type="submit">
                     Submit
                   </Button>
                 </form>
@@ -162,8 +200,8 @@ const AddDivision = () => {
           </DialogContent>
         </Dialog>
       </div>
-      {/* Tour type data table */}
-      <DataTable columns={columns} data={tourTypes} />
+      {/* Division data table */}
+      <DataTable columns={columns} data={divisions} />
     </div>
   );
 };

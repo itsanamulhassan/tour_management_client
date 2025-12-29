@@ -3,9 +3,10 @@ import { baseApi } from "@/redux/baseApi";
 const divisionApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
     AddDivision: build.mutation({
-      query: () => ({
+      query: (data) => ({
         url: "divisions",
         method: "POST",
+        data,
       }),
       invalidatesTags: ["divisions"],
     }),
@@ -14,6 +15,7 @@ const divisionApi = baseApi.injectEndpoints({
         url: "divisions",
       }),
       providesTags: ["divisions"],
+      transformResponse: (res) => res?.data,
     }),
     getDivision: build.query({
       query: (id) => ({
@@ -38,4 +40,10 @@ const divisionApi = baseApi.injectEndpoints({
   }),
 });
 
-export const { useAddDivisionMutation } = divisionApi;
+export const {
+  useAddDivisionMutation,
+  useGetDivisionQuery,
+  useGetDivisionsQuery,
+  useRemoveDivisionMutation,
+  useUpdateDivisionMutation,
+} = divisionApi;
