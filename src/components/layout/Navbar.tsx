@@ -116,7 +116,7 @@ const Navbar = () => {
                         </NavigationMenuLink>
                       </NavigationMenuItem>
                     )}
-                    {link.role === data?.data?.role && (
+                    {link.role === data?.role && (
                       <NavigationMenuItem>
                         <NavigationMenuLink
                           asChild
@@ -136,15 +136,13 @@ const Navbar = () => {
         <div className="flex items-center gap-2">
           <ModeToggle />
 
-          {!data?.data?.email && isLoading && (
-            <Loader className="spin-out size-4" />
-          )}
-          {!data?.data?.email && !isLoading && (
+          {!data?.email && isLoading && <Loader className="spin-out size-4" />}
+          {!data?.email && !isLoading && (
             <Button asChild className="text-sm">
               <Link to="/login">Login</Link>
             </Button>
           )}
-          {data?.data?.email && (
+          {data?.email && (
             <Button
               onClick={async () => {
                 await logout(undefined);
